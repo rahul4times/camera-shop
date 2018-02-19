@@ -1,28 +1,20 @@
 import React, { Component } from 'react';
+import MainContainer from './components/main_container';
 import Header from './components/header';
-import CameraList from './components/camera_list';
-import Cart from './components/cart';
+import Checkout from './components/checkout';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Container, Row, Col } from 'reactstrap';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <Header />
-        <Container>
-          <Row>
-            <Col xs="12" sm="6">
-              <br/>
-              <CameraList />
-            </Col>
-            <Col xs="12" sm="6">
-              <br/>
-              <Cart />
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Router>
+        <div>
+          <Header />
+          <Route exact path="/" component={ MainContainer } />
+          <Route path="/checkout" component={ Checkout } />
+        </div>
+      </Router>
     );
   }
 }

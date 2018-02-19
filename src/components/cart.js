@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, CardHeader, CardBody, Table } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { deleteFromCart } from '../actions/cameras';
+import { Card, CardHeader, CardBody, Table, CardText, Button } from 'reactstrap';
+import { Link } from "react-router-dom";
 
 class Cart extends Component {
 
+  handleDelete = (item) => {
+    this.props.deleteFromCart(item.id);
+  }
+
   render(){
-    const sortedInCart = this.props.inCart.sort((a,b) => a.id - b.id);
-    const inCart = sortedInCart.map((item, i) => {
+
+    const inCart = this.props.inCart.filter(camera => camera.in_cart === true)
+    const subTotal = inCart.reduce((accum, camera) => {
+      return accum + camera.price
+    }, 0);
+
+    const tax = +(subTotal * .086).toFixed(2);
+    const total = (subTotal + tax).toFixed(2);
+
+    const cameras = inCart.map((item, i) => {
       return(
         <tr key={i}>
           <td>{item.title}</td>
           <td>$ {item.price}</td>
-          <td>Remove</td>
+          <td>
+            <input type="button" value="Delete" onClick={()=>this.handleDelete(item)}/>
+          </td>
         </tr>
       )
     });
@@ -29,9 +46,15 @@ class Cart extends Component {
               </tr>
             </thead>
             <tbody>
-              {inCart}
+              {cameras}
             </tbody>
           </Table>
+          <hr/>
+          <CardText>Sub-total: $ {subTotal}</CardText>
+          <CardText>Tax: $ {tax}</CardText>
+          <CardText>Total: $ {total}</CardText>
+          <hr/>
+          <Button><Link to="/checkout">Checkout</Link></Button>
        </CardBody>
      </Card>
     );
@@ -40,7 +63,12 @@ class Cart extends Component {
 
 function mapStateToProps(state){
   return {
-    inCart: state.inCart
+    inCart: state.cameras
   }
 }
-export default connect(mapStateToProps, null) (Cart);
+function mapDispatchToProps(dispatch){
+  return {
+    deleteFromCart: bindActionCreators(deleteFromCart, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps) (Cart);

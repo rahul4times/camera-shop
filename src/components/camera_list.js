@@ -17,13 +17,13 @@ class CameraList extends Component {
     this.props.addToCart(camera.id);
   }
 
-
   render(){
     const imageSize = {
       width: '300px',
       height: '250px'
     };
-    const camera = this.props.cameras.map((camera, i) =>{
+    const sortedList = this.props.cameras.sort((a,b) => a.id - b.id);
+    const camera = sortedList.map((camera, i) => {
       return(
         <Card key={i}>
           <CardHeader>{camera.title}</CardHeader>
@@ -38,6 +38,7 @@ class CameraList extends Component {
       </Card>
       )
     });
+    
     return(
       <div>
         {camera}
@@ -47,7 +48,6 @@ class CameraList extends Component {
 }
 
 function mapStateToProps(state){
-  console.log("State: ", state);
   return {
     cameras: state.cameras
   }

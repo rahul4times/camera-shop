@@ -8,11 +8,11 @@ export default(state=[], action) => {
 
       const addedInCart = action.payload.data.filter((item, i) => {
         return (
-          item.in_cart
+          item.in_cart === true
         )
       })
 
-    return action.payload.data;
+    return addedInCart;
 
     default:
       return state;

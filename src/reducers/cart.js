@@ -6,13 +6,11 @@ export default(state=[], action) => {
       return state;
     case ADD_TOCART_SUCCESS:
 
-      const addedInCart = action.payload.data.filter((item, i) => {
-        return (
-          item.in_cart === true
-        )
+      const addedInCart = state.filter(item => {
+        return item.id !== action.payload.data[0].id
       })
-
-    return addedInCart;
+      
+    return [...action.payload.data, ...addedInCart];
 
     default:
       return state;

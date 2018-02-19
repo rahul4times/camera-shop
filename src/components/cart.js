@@ -5,8 +5,8 @@ import { Card, CardHeader, CardBody, Table } from 'reactstrap';
 class Cart extends Component {
 
   render(){
-
-    const inCart = this.props.inCart.map((item, i) => {
+    const sortedInCart = this.props.inCart.sort((a,b) => a.id - b.id);
+    const inCart = sortedInCart.map((item, i) => {
       return(
         <tr key={i}>
           <td>{item.title}</td>
